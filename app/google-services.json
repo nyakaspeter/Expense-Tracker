@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "760874891926",
+    "firebase_url": "https://tartozaskezelo-2ffab.firebaseio.com",
+    "project_id": "tartozaskezelo-2ffab",
+    "storage_bucket": "tartozaskezelo-2ffab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760874891926:android:add8b446a3fb626a",
+        "android_client_info": {
+          "package_name": "bme.gy4ez8.tartozaskezelo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760874891926-sirk8nc6kc4e0pp2iupkg9tc57rfnvkj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "bme.gy4ez8.tartozaskezelo",
+            "certificate_hash": "dfe0158bffb4ed8922791e71e92ab9284b401cc2"
+          }
+        },
+        {
+          "client_id": "760874891926-aqqjgb8aakgh0fgmuh0vqo8ogi4hdets.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_0_UvaBUk3uj5Zh93VCZC35-WlCHGATU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760874891926-aqqjgb8aakgh0fgmuh0vqo8ogi4hdets.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

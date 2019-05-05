@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="bme.gy4ez8.tartozaskezelo.TabbedActivity">
+
+    <item
+        android:id="@+id/menu_addfriend"
+        android:icon="@drawable/ic_person_add_black_24dp"
+        android:title="Ismerős felvétele"
+        app:showAsAction="always"
+        app:iconTint="#FFFFFF"/>
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="Kijelentkezés"
+        app:showAsAction="always"
+        app:iconTint="#FFFFFF"/>
+
+</menu>

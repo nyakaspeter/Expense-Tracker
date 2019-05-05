@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+    <TextView
+        android:id="@+id/addtransaction_kinek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="0dp"
+        android:text="Kinek"
+        android:textColor="?android:textColorHint"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/addtransaction_buyer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="0dp"
+        android:paddingTop="8dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="16dp"
+        android:text="Kinek"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/edittransaction_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:visibility="gone"
+        style="@style/Widget.AppCompat.Spinner.Underlined" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/addtransaction_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        style="@style/Widget.AppCompat.Spinner.Underlined"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/addtransaction_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tétel"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/addtransaction_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ár"
+            android:inputType="number" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/addtransaction_date2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="353dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/addtransaction_date2"
+            android:hint="Dátum"
+            android:longClickable="false" />
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

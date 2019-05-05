@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tartozáskezelő</string>
+    <string name="tab_text_1">Tételek</string>
+    <string name="tab_text_2">Ismerősök</string>
+    <string name="tab_text_3">Összesítés</string>
+    <string name="action_settings">Settings</string>
+</resources>
