@@ -20,11 +20,16 @@ import bme.gy4ez8.tartozaskezelo.adapter.FriendAdapter
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.db
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friends
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
+import bme.gy4ez8.tartozaskezelo.fragment.TransactionsFragment.Companion.adapter
 
 class FriendsFragment : Fragment() {
 
+    companion object {
+        var adapter: RecyclerView.Adapter<*>? = null
+    }
+
     private var recyclerView: RecyclerView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
+
     internal var friend_name: String? = null
     internal var friend_status: String? = null
     internal var friend_id: String? = null
@@ -41,7 +46,7 @@ class FriendsFragment : Fragment() {
         adapter = FriendAdapter(friends, activity!!)
         recyclerView!!.adapter = adapter
 
-        getFriends()
+        //getFriends()
 
         return view
     }

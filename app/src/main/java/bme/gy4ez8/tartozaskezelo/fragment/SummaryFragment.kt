@@ -19,18 +19,65 @@ import bme.gy4ez8.tartozaskezelo.firebase.Firebase.db
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friends
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transactionsRef
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.username
 import bme.gy4ez8.tartozaskezelo.model.Friend
+import kotlinx.android.synthetic.main.fragment_summary.*
 import java.util.*
 
 
 class SummaryFragment : Fragment() {
 
-    internal lateinit var textTotal: TextView
-    internal lateinit var textMydebt: TextView
-    internal lateinit var textFrienddebt: TextView
-    internal lateinit var textUsername: TextView
+    companion object {
+        lateinit var textTotal: TextView
+        lateinit var textMydebt: TextView
+        lateinit var textFrienddebt: TextView
+        lateinit var textUsername: TextView
 
-    internal var username: String? = null
+        fun refreshView() {
+            textUsername.text = "Üdv, $username!"
+
+            var mydebt = 0
+            var friendsdebt = 0
+
+            for (f in friends) {
+                if(f.sum > 0) friendsdebt += f.sum
+                else mydebt += -f.sum
+            }
+
+            val total = friendsdebt - mydebt
+
+            textMydebt.text = String.format("Saját tartozásaim: %d Ft", mydebt)
+            textFrienddebt.text = String.format("Tartozások felém: %d Ft", friendsdebt)
+            /*
+            if (isAdded) {
+                if (total > 0) {
+                    textTotal.text = String.format("Várható bevétel: %d Ft", total)
+                    Glide.with(activity!!)
+                            .load(R.drawable.gifmoney)
+                            .apply(RequestOptions()
+                                    .fitCenter())
+                            .into(gif)
+                } else if (total == 0) {
+                    textTotal.text = String.format("Várható bevétel: %d Ft", total)
+                    Glide.with(activity!!)
+                            .load(R.drawable.gifzero)
+                            .apply(RequestOptions()
+                                    .fitCenter())
+                            .into(gif)
+                } else {
+                    textTotal.text = String.format("Várható kiadás: %d Ft", Math.abs(total))
+                    Glide.with(activity!!)
+                            .load(R.drawable.gifnomoney)
+                            .apply(RequestOptions()
+                                    .fitCenter())
+                            .into(gif)
+                }
+            }*/
+        }
+        //lateinit var gif: ImageView
+    }
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -41,12 +88,12 @@ class SummaryFragment : Fragment() {
         textMydebt = view.findViewById(R.id.summary_mydebt)
         textFrienddebt = view.findViewById(R.id.summary_frienddebt)
         textUsername = view.findViewById(R.id.summary_username)
+        //gif = view.findViewById(R.id.gif)
 
-        gif = view.findViewById(R.id.gif)
 
         transactionsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                refresh()
+                refreshView()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -54,10 +101,12 @@ class SummaryFragment : Fragment() {
             }
         })
 
-        refresh()
+        //refresh()
 
         return view
     }
+
+
 
     fun refresh() {
 
@@ -67,7 +116,7 @@ class SummaryFragment : Fragment() {
 
                 username = dataSnapshot.child("users").child(user!!.uid).child("username").getValue(String::class.java)
 
-                textUsername.text = "Üdv, $username!"
+
 
                 for (friendSnapshot in dataSnapshot.child("users").child(user!!.uid).child("friends").children) {
 
@@ -152,11 +201,6 @@ class SummaryFragment : Fragment() {
 
             }
         })
-    }
-
-    companion object {
-
-        internal lateinit var gif: ImageView
     }
 
 }

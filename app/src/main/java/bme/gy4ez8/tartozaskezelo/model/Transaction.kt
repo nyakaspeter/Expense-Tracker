@@ -3,12 +3,12 @@ package bme.gy4ez8.tartozaskezelo.model
 import java.util.Comparator
 
 class Transaction {
-    lateinit var id: String
-    lateinit var item: String
-    lateinit var buyer: String
-    lateinit var date: String
-    lateinit var receiver: String
-    var price: Int? = null
+    var id: String = ""
+    var item: String = ""
+    var buyer: String = ""
+    var date: String = ""
+    var receiver: String = ""
+    var price: Int = 0
 
     constructor() {}
 

@@ -27,8 +27,11 @@ import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
 
 class TransactionsFragment : Fragment() {
 
+    companion object {
+        var adapter: RecyclerView.Adapter<*>? = null
+    }
+
     private var recyclerView: RecyclerView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
 
     private var fab: FloatingActionButton? = null
 
@@ -62,38 +65,7 @@ class TransactionsFragment : Fragment() {
         adapter = TransactionAdapter(transactions, activity!!)
         recyclerView!!.adapter = adapter
 
-        getTransactions()
-
         return view
-    }
-
-    private fun getTransactions() {
-
-        transactionsRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                transactions.clear()
-
-                for (transactionSnapshot in dataSnapshot.children) {
-                    if (transactionSnapshot.child("buyer").getValue(String::class.java) == user!!.uid || transactionSnapshot.child("receiver").getValue(String::class.java) == user!!.uid) {
-                        val transaction = transactionSnapshot.getValue(Transaction::class.java)
-                        transactions.add(transaction!!)
-                    }
-                }
-                val transactionComparator = Transaction.OrderByDateDescending()
-                Collections.sort(transactions, transactionComparator)
-
-                adapter = TransactionAdapter(transactions, activity!!)
-                recyclerView!!.adapter = adapter
-
-                recyclerView!!.scheduleLayoutAnimation()
-                recyclerView!!.invalidate()
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
-
     }
 
     fun addTransaction() {
