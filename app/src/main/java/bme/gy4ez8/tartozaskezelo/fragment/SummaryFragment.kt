@@ -17,7 +17,7 @@ import com.google.firebase.database.ValueEventListener
 import bme.gy4ez8.tartozaskezelo.R
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.db
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friends
-import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transactionsRef
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transRef
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.username
 import bme.gy4ez8.tartozaskezelo.model.Friend
@@ -91,7 +91,7 @@ class SummaryFragment : Fragment() {
         //gif = view.findViewById(R.id.gif)
 
 
-        transactionsRef.addValueEventListener(object : ValueEventListener {
+        transRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 refreshView()
             }

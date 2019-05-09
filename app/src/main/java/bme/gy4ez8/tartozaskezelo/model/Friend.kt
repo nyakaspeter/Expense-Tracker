@@ -1,7 +1,7 @@
 package bme.gy4ez8.tartozaskezelo.model
 
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friends
-import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transactionsRef
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transRef
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.usersRef
 import bme.gy4ez8.tartozaskezelo.fragment.FriendsFragment
@@ -42,47 +42,10 @@ class Friend {
                 for(user in p0.children) {
                     if(user.child("uid").value == uid) {
                         name = user.child("username").value as String
-                        val index = friends.indexOf(this@Friend)
-                        FriendsFragment.adapter!!.notifyItemChanged(index)
                     }
                 }
             }
         })
-    }
-
-    public fun loadSum() {
-        transactionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                for (transactionSnapshot in p0.children) {
-                    if (transactionSnapshot.child("buyer").getValue(String::class.java) == uid && transactionSnapshot.child("receiver").getValue(String::class.java) == user!!.uid) {
-                        mydebt += transactionSnapshot.child("price").getValue(Int::class.java)!!
-                    }
-
-                    if (transactionSnapshot.child("buyer").getValue(String::class.java) == user!!.uid && transactionSnapshot.child("receiver").getValue(String::class.java) == uid) {
-                        friendsdebt += transactionSnapshot.child("price").getValue(Int::class.java)!!
-                    }
-                }
-
-                if (status == "confirmed") {
-                    sum = friendsdebt - mydebt
-                } else {
-                    sum = Integer.MAX_VALUE
-                }
-
-                val friendComparator = OrderBySumDescending()
-                Collections.sort(friends, friendComparator)
-
-                FriendsFragment.adapter!!.notifyDataSetChanged()
-                SummaryFragment.refreshView()
-
-            }
-
-        })
-
-
     }
 
     class OrderBySumDescending : Comparator<Friend> {

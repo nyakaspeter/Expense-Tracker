@@ -27,8 +27,10 @@ import bme.gy4ez8.tartozaskezelo.R
 import bme.gy4ez8.tartozaskezelo.adapter.CheckableSpinnerAdapter
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friends
-import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transactionsRef
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friendsRef
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transRef
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.userRef
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.usersRef
 import bme.gy4ez8.tartozaskezelo.model.Friend
 import bme.gy4ez8.tartozaskezelo.model.Transaction
@@ -149,7 +151,7 @@ class AddTransactionDialog : AppCompatDialogFragment() {
                                 if (userSnapshot.child("username").getValue(String::class.java) == f.name) {
                                     val receiverUid = userSnapshot.child("uid").getValue(String::class.java)
 
-                                    val id = transactionsRef.push().key
+                                    val id = transRef.push().key
                                     val transaction = Transaction(
                                             id!!,
                                             name.editText!!.text.toString(),
@@ -159,7 +161,8 @@ class AddTransactionDialog : AppCompatDialogFragment() {
                                             Integer.parseInt(price.editText!!.text.toString())
                                     )
 
-                                    transactionsRef.child(id!!).setValue(transaction)
+                                    transRef.child(id).setValue(transaction)
+                                    usersRef.child(receiverUid).child("transactions").child(id!!).setValue(transaction)
 
                                     Firebase.sendNotificationToUser(receiverUid, "Új tartozás lett kiírva", Firebase.username + " új tartozást írt ki (" + Integer.parseInt(price.editText!!.text.toString()) + "Ft)")
 

@@ -13,6 +13,9 @@ import bme.gy4ez8.tartozaskezelo.R
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.usersRef
 import bme.gy4ez8.tartozaskezelo.model.Friend
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class FriendAdapter(internal var friends: List<Friend>, internal var context: Context) : RecyclerView.Adapter<FriendAdapter.ViewHolder>() {
 
@@ -24,13 +27,32 @@ class FriendAdapter(internal var friends: List<Friend>, internal var context: Co
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         val friend = friends[i]
 
-        viewHolder.name.text = friend.name
+        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (userSnapshot in dataSnapshot.children) {
+                    if (userSnapshot.child("uid").getValue(String::class.java) == friend.uid) {
+                        val name = userSnapshot.child("username").getValue(String::class.java)
+                        viewHolder.name.text = name
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
+
+        viewHolder.name.visibility = View.VISIBLE
+        viewHolder.status1.visibility = View.VISIBLE
+        viewHolder.card.setBackgroundResource(R.color.cardview_dark_background)
 
         if (friend.status == "received") {
             viewHolder.status1.text = "ismerősnek jelölt"
 
             viewHolder.status2.visibility = View.GONE
             viewHolder.sum.visibility = View.GONE
+            viewHolder.accept.visibility = View.VISIBLE
+            viewHolder.decline.visibility = View.VISIBLE
         }
 
         if (friend.status == "sent") {
@@ -39,6 +61,7 @@ class FriendAdapter(internal var friends: List<Friend>, internal var context: Co
             viewHolder.status2.visibility = View.GONE
             viewHolder.sum.visibility = View.GONE
             viewHolder.accept.visibility = View.GONE
+            viewHolder.decline.visibility = View.VISIBLE
         }
 
         if (friend.status == "confirmed") {
@@ -55,6 +78,8 @@ class FriendAdapter(internal var friends: List<Friend>, internal var context: Co
                 viewHolder.sum.text = "Nincs tartozás"
             }
 
+            viewHolder.status2.visibility = View.VISIBLE
+            viewHolder.sum.visibility = View.VISIBLE
             viewHolder.accept.visibility = View.GONE
             viewHolder.decline.visibility = View.GONE
         }

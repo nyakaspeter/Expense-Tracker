@@ -26,7 +26,8 @@ import java.util.Locale
 
 import bme.gy4ez8.tartozaskezelo.R
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friends
-import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transactionsRef
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.friendsRef
+import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transRef
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.usersRef
 import bme.gy4ez8.tartozaskezelo.model.Transaction
@@ -144,7 +145,10 @@ class EditTransactionDialog(var tran: Transaction) : AppCompatDialogFragment() {
 
             builder.setPositiveButton("Mentés") { dialog, which -> }
 
-            builder.setNeutralButton("Tétel törlése") { dialog, which -> transactionsRef.child(tran.id).removeValue() }
+            builder.setNeutralButton("Tétel törlése") { dialog, which ->
+                transRef.child(tran.id).removeValue()
+                usersRef.child(tran.receiver).child("transactions").child(tran.id).removeValue()
+            }
         } else {
             builder.setTitle("Kapott kölcsön")
             buyer.setTextColor(resources.getColor(R.color.colorWhite))
@@ -194,7 +198,10 @@ class EditTransactionDialog(var tran: Transaction) : AppCompatDialogFragment() {
                                         Integer.parseInt(price.editText!!.text.toString())
                                 )
 
-                                transactionsRef.child(tran.id).setValue(transaction)
+                                transRef.child(tran.id).setValue(transaction)
+                                usersRef.child(tran.receiver).child("transactions").child(tran.id).removeValue()
+                                usersRef.child(receiverUid).child("transactions").child(tran.id).setValue(transaction)
+
                                 d.dismiss()
                             }
                         }

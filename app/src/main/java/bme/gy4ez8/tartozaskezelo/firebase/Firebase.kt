@@ -1,5 +1,6 @@
 package bme.gy4ez8.tartozaskezelo.firebase
 
+import android.provider.ContactsContract
 import bme.gy4ez8.tartozaskezelo.adapter.FriendAdapter
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.notificationsRef
 import bme.gy4ez8.tartozaskezelo.fragment.FriendsFragment
@@ -22,9 +23,9 @@ object Firebase {
     lateinit var db : FirebaseDatabase
 
     lateinit var userRef : DatabaseReference
+    lateinit var transRef : DatabaseReference
     lateinit var usersRef : DatabaseReference
     lateinit var notificationsRef : DatabaseReference
-    lateinit var transactionsRef : DatabaseReference
     lateinit var friendsRef : DatabaseReference
 
     var username : String? = null
@@ -38,13 +39,13 @@ object Firebase {
 
         db = FirebaseDatabase.getInstance()
         usersRef = db.getReference("users")
-        transactionsRef = db.getReference("transactions")
         notificationsRef = db.getReference("notifications")
     }
 
     fun loadData() {
         userRef = usersRef.child(user!!.uid)
         friendsRef = userRef.child("friends")
+        transRef = userRef.child("transactions")
 
         userRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -56,75 +57,54 @@ object Firebase {
             }
         })
 
-        transactionsRef.addValueEventListener(object: ValueEventListener {
+        userRef.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                loadFriends()
-                loadTransactions()
-            }
-        })
 
-        friendsRef.addValueEventListener(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                loadFriends()
-                loadTransactions()
-            }
-        })
-
-    }
-
-    fun loadTransactions() {
-        transactionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val prevcount = transactions.count()
+                val transcount = transactions.count()
                 transactions.clear()
 
-                for (transactionSnapshot in dataSnapshot.children) {
-                    if (transactionSnapshot.child("buyer").getValue(String::class.java) == user!!.uid || transactionSnapshot.child("receiver").getValue(String::class.java) == user!!.uid) {
-                        val transaction = transactionSnapshot.getValue(Transaction::class.java)
-                        transactions.add(transaction!!)
-                    }
+                for (transactionSnapshot in p0.child("transactions").children) {
+                    val transaction = transactionSnapshot.getValue(Transaction::class.java)
+                    transactions.add(transaction!!)
                 }
                 val transactionComparator = Transaction.OrderByDateDescending()
                 Collections.sort(transactions, transactionComparator)
 
-                TransactionsFragment.adapter!!.notifyItemRangeRemoved(0, prevcount)
+                TransactionsFragment.adapter!!.notifyItemRangeRemoved(0, transcount)
                 TransactionsFragment.adapter!!.notifyItemRangeInserted(0, transactions.count())
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
-    }
-
-    fun loadFriends() {
-        friendsRef.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
+                val friendscount = friends.count()
                 friends.clear()
 
-                for(friend in p0.children) friends.add(friend.getValue(Friend::class.java)!!)
-
-                for(friend in friends) {
-                    friend.loadName()
-                    friend.loadSum()
+                for(friendSnapshot in p0.child("friends").children) {
+                    val friend = friendSnapshot.getValue(Friend::class.java)
+                    friends.add(friend!!)
                 }
 
-                val friendComparator = Friend.OrderBySumDescending()
-                Collections.sort(friends, friendComparator)
+                for(f in friends) {
+                    f.loadName()
+                    if(f.status == "sent" || f.status == "received") {
+                        f.sum = Int.MAX_VALUE
+                        break
+                    }
+                    for(t in transactions) {
+                        if(t.buyer == f.uid) f.mydebt += t.price
+                        if(t.receiver == f.uid) f.friendsdebt += t.price
+                    }
+                    f.sum = f.friendsdebt - f.mydebt
+                }
 
-                //FriendsFragment.adapter!!.notifyDataSetChanged()
+                val friendsComparator = Friend.OrderBySumDescending()
+                Collections.sort(friends, friendsComparator)
+
+                FriendsFragment.adapter!!.notifyItemRangeRemoved(0, friendscount)
+                FriendsFragment.adapter!!.notifyItemRangeInserted(0, friends.count())
             }
-
         })
+
     }
 
     fun sendNotificationToUser(uid: String, title: String, body: String) {

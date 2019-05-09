@@ -21,7 +21,6 @@ import bme.gy4ez8.tartozaskezelo.model.Transaction
 import bme.gy4ez8.tartozaskezelo.adapter.TransactionAdapter
 import bme.gy4ez8.tartozaskezelo.dialog.AddTransactionDialog
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transactions
-import bme.gy4ez8.tartozaskezelo.firebase.Firebase.transactionsRef
 import bme.gy4ez8.tartozaskezelo.firebase.Firebase.user
 
 
