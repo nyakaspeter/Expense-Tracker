@@ -18,6 +18,9 @@ import kotlin.collections.HashMap
 
 
 object Firebase {
+
+    val dataLoaded = Event<Unit>()
+
     lateinit var auth : FirebaseAuth
     var user : FirebaseUser? = null
     lateinit var db : FirebaseDatabase
@@ -102,6 +105,8 @@ object Firebase {
 
                 FriendsFragment.adapter!!.notifyItemRangeRemoved(0, friendscount)
                 FriendsFragment.adapter!!.notifyItemRangeInserted(0, friends.count())
+
+                dataLoaded.invoke(Unit)
             }
         })
 
@@ -115,5 +120,11 @@ object Firebase {
         notification.put("body", body)
 
         notificationsRef.push().setValue(notification)
+    }
+
+    class Event<T> {
+        private val handlers = arrayListOf<(Event<T>.(T) -> Unit)>()
+        fun plusAssign(handler: Event<T>.(T) -> Unit) { handlers.add(handler) }
+        fun invoke(value: T) { for (handler in handlers) handler(value) }
     }
 }
