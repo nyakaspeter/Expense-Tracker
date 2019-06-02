@@ -12,6 +12,8 @@ Baráti körömben gyakran előfordul, hogy valamilyen közösen igénybe vett s
 * Tartozások felvétele/módosítása törlése
 * Értesítés küldése új tartozás kiíráskor vagy ismerősnek jelöléskor
 
+Az alkalmazás béta állapotú, hibák előfordulhatnak!
+
 ## Képernyőképek
 <p float="center">
 <img src="https://user-images.githubusercontent.com/43880678/58761783-1ea85a80-8548-11e9-913e-005eb539d46b.jpg" width=438>
